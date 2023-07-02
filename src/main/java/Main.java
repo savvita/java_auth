@@ -6,6 +6,10 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 import db.DB;
+import jui.NewUserFrame;
+import jui.UsersForm;
+
+import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,8 +22,7 @@ public class Main {
 
         DB db = new DB(props.getProperty("url"), props.getProperty("username"), props.getProperty("password"));
 
-        AuthFrame frame = new AuthFrame(db);
+        JFrame frame = new AuthFrame(db);
         frame.setVisible(true);
     }
-
 }

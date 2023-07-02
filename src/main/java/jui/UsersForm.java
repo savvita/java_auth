@@ -59,6 +59,8 @@ public class UsersForm extends JFrame {
     }
 
     private void addUser() {
-
+        NewUserFrame frame = new NewUserFrame(db);
+        frame.onUserAdded.add(() -> model.update(db.getUsers()));
+        frame.setVisible(true);
     }
 }

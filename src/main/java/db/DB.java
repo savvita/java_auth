@@ -33,7 +33,6 @@ public class DB {
                 PreparedStatement preparedStatement = conn.prepareStatement(query);
                 preparedStatement.setString(1, login);
                 String encoded = getEncodedPassword(password);
-                System.out.println(encoded);
                 preparedStatement.setString(2, getEncodedPassword(password));
                 ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -60,6 +59,28 @@ public class DB {
                 preparedStatement.setString(2, getEncodedPassword((password)));
                 int rowsInserted = preparedStatement.executeUpdate();
                 return rowsInserted > 0;
+            }
+        }
+        catch(Exception ex){
+            System.out.println(ex);
+        }
+
+        return false;
+    }
+
+    public boolean checkUsername(String login) {
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+            try (Connection conn = DriverManager.getConnection(url, username, this.password)){
+                String query = "SELECT COUNT(*) FROM users WHERE login= ?";
+                PreparedStatement preparedStatement = conn.prepareStatement(query);
+                preparedStatement.setString(1, login);
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if(resultSet.next()) {
+                    Integer res = resultSet.getInt(1);
+                    return res == 0;
+                }
             }
         }
         catch(Exception ex){
