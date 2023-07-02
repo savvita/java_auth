@@ -1,5 +1,7 @@
 package jui;
 
+import db.DB;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,7 +10,9 @@ public class AuthFrame extends JFrame {
     private JPasswordField passwordTxt;
     private JLabel msg;
     private JButton loginBtn;
-    public AuthFrame() {
+
+    private final DB db;
+    public AuthFrame(DB db) {
         super("Authorization");
         setSize(500, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -17,6 +21,8 @@ public class AuthFrame extends JFrame {
         Container container = getContentPane();
 
         container.add(getContainer());
+
+        this.db = db;
     }
 
     private Component getContainer() {
@@ -27,7 +33,7 @@ public class AuthFrame extends JFrame {
         passwordTxt = new JPasswordField();
         getInputField(panel, "Password : ", passwordTxt);
 
-        msg = new JLabel("Text");
+        msg = new JLabel();
         addMsgLabel(panel, msg);
 
         addButtons(panel);
@@ -76,6 +82,7 @@ public class AuthFrame extends JFrame {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         loginBtn = new JButton("Login");
+        loginBtn.addActionListener((x) -> connect());
         panel.add(loginBtn);
 
         JButton exitBtn = new JButton("Cancel");
@@ -87,5 +94,18 @@ public class AuthFrame extends JFrame {
         container.add(panel, constraints);
 
         return container;
+    }
+
+    private void connect() {
+        String username = loginTxt.getText();
+        String password = passwordTxt.getText();
+
+        if(username.isBlank() || password.isBlank()) {
+            msg.setText("All fields are required");
+        } else if(!db.checkUser(username, password)) {
+            msg.setText("Access denied");
+        } else {
+            msg.setText("");
+        }
     }
 }
