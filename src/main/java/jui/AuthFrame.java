@@ -106,6 +106,9 @@ public class AuthFrame extends JFrame {
             msg.setText("Access denied");
         } else {
             msg.setText("");
+            JFrame usersFrame = new UsersForm(db);
+            this.setVisible(false);
+            usersFrame.setVisible(true);
         }
     }
 }
